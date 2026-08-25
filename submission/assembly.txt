@@ -1,0 +1,8 @@
+5
+COMPARE M(0)   JUMP+ M(6,0:19)
+LOAD MQ, M(7)   LOAD M(0)
+MUL M(0)   STOR M(7)
+LOAD M(0)   DEC
+STOR M(0)   JUMP+ M(2,0:19)
+NOP   HALT
+1
