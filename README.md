@@ -11,8 +11,6 @@ or MemWrite signal, so a run can be traced as the sequence of register
 transfers a real datapath would perform, rather than as `AC ← M(X)` in one
 step.
 
-Built for EG 212 Computer Architecture (IIIT Bangalore, Feb 2024).
-
 ## Quick start
 
 Python 3.6+, nothing to install.
@@ -153,50 +151,26 @@ python tests/test_toolchain.py
 
 14 checks, covering both tools end to end: every emitted word is 40 bits and
 splits into a known opcode plus a 12-bit address; the assembler's output
-matches the machine code committed in `programs/` *and* the machine code
-originally submitted in `submission/`; the simulator computes `n!` correctly
-for `n = 0..7`; `n = 0` skips the loop in two cycles; and malformed input —
-an unknown mnemonic, a missing address, an undefined opcode, a program with
-no `HALT` — is rejected with a diagnostic rather than a stack trace.
+matches the machine code in `programs/` and in `submission/`; the simulator
+computes `n!` correctly for `n = 0..7`; `n = 0` skips the loop in two cycles;
+and malformed input — an unknown mnemonic, a missing address, an undefined
+opcode, a program with no `HALT` — is rejected with a diagnostic rather than
+a stack trace.
 
 `pytest tests/` works too.
 
-## Relation to the original submission
+## Assignment
 
-`submission/` holds the Feb 2024 coursework files exactly as they were handed
-in. The code in `ias/` is a reorganised and corrected version of them:
-
-- **The assembler was rewritten.** The original carried the assembly program
-  as a hardcoded Python list rather than reading the `.asm` file, and patched
-  its own output in place afterwards; it did not reproduce the machine code
-  that was submitted alongside it. The version here parses the source file,
-  and its output is byte-identical to the submitted machine code — a test
-  asserts exactly that.
-- **The opcode table was unified.** The original encoded opcodes separately in
-  the assembler and the simulator, and the two copies disagreed on `COMPARE`
-  and `HALT`. Both now read one table, `ias/isa.py`. The values kept are the
-  simulator's: they are what the submitted machine code actually encodes, and
-  the report's opcode list agrees with them (`COMPARE = 10101010`,
-  `DEC = 11111111`).
-- **The simulator was restructured**, not changed in behaviour: registers and
-  memory moved onto a `Processor` class instead of module globals, memory
-  access is bounds-checked, tracing became optional, and the file path is a
-  command-line argument. It still produces 120 for 5!.
-- **`factorial.c` was replaced.** The C file in the original submission is a
-  primality test, unrelated to the assembly it was submitted with. The one in
-  `programs/` is the factorial loop the assembly actually implements.
-
-What the assignment asked for, and where each requirement is answered, is in
-[docs/problem_statement.md](docs/problem_statement.md); the report handed in
-with it is [docs/report.pdf](docs/report.pdf).
+Written for EG 212 Computer Architecture (IIIT Bangalore), Feb 2024. What was
+asked, and where each part is answered, is in
+[docs/problem_statement.md](docs/problem_statement.md); the submitted report
+is [docs/report.pdf](docs/report.pdf). The submitted files themselves are
+kept in [`submission/`](submission/).
 
 ## Credits
 
-Assignment 1 was done in a group of three:
+Done in a group of three:
 
 - Kotyada Parthiv (IMT2023559)
 - Taral Sri Sai Ram (IMT2023588)
 - Dheeraj Muppiri (IMT2023596)
-
-`submission/` and `docs/report.pdf` are the group's original work. The
-reorganisation, the rewritten assembler and the test suite are mine.
